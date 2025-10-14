@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Rushi Parekh</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CDN (for rapid layout + utility classes) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Simple reset + base -->
+    <style>
+        :root {
+            --bg: #05060a;
+            --card: #0b0d12;
+            --muted: #9aa3b2;
+            --accent: #7c5cff;
+            --accent-2: #00e5ff;
+            --glass: rgba(255, 255, 255, 0.04);
+            --neon: 0 0 18px rgba(124, 92, 255, 0.12), 0 0 40px rgba(0, 229, 255, 0.04);
+            --glass-2: linear-gradient(135deg, rgba(124, 92, 255, 0.06), rgba(0, 229, 255, 0.02));
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(124, 92, 255, 0.03), transparent), radial-gradient(800px 400px at 90% 90%, rgba(0, 229, 255, 0.02), transparent), var(--bg);
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color: #e6eef6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        a {
+            color: inherit
+        }
+
+        /* Top progress bar */
+        #progress {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            width: 0;
+            z-index: 60;
+            border-bottom-right-radius: 6px
+        }
+
+        /* Loader overlay */
+        #loader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(5, 6, 10, 0.88), rgba(5, 6, 10, 0.95));
+            z-index: 80;
+            backdrop-filter: blur(6px)
+        }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 96px;
+            height: 96px
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            margin: 8px;
+            border: 6px solid transparent;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(.65, .05, .36, 1) infinite
+        }
+
+        .lds-ring div:nth-child(2) {
+            border: 6px solid transparent;
+            border-right-color: var(--accent-2);
+            animation-delay: -0.45s
+        }
+
+        .lds-ring div:nth-child(3) {
+            border: 6px solid transparent;
+            border-bottom-color: rgba(124, 92, 255, 0.9);
+            animation-delay: -0.3s
+        }
+
+        .lds-ring div:nth-child(4) {
+            border: 6px solid transparent;
+            border-left-color: rgba(0, 229, 255, 0.75);
+            animation-delay: -0.15s
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 70;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            padding: 8px 14px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border-radius: 14px;
+            box-shadow: var(--neon);
+            backdrop-filter: blur(6px)
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #071227;
+            font-family: Playfair Display
+        }
+
+        .nav-pill {
+            font-size: 13px;
+            color: var(--muted);
+            padding: 8px 10px;
+            border-radius: 10px
+        }
+
+        .nav-pill:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.02)
+        }
+
+        /* Hero / Section base */
+        section.panel {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .bg-layer {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: contrast(0.9) saturate(1.05);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: 1
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(2, 3, 6, 0.55), rgba(2, 3, 6, 0.7));
+            z-index: 2
+        }
+
+        .container {
+            position: relative;
+            z-index: 6;
+            max-width: 1100px;
+            padding: 56px 24px
+        }
+
+        /* Card look */
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 28px;
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 30px rgba(2, 3, 8, 0.6)
+        }
+
+        .title-serif {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            font-size: clamp(26px, 4.4vw, 40px);
+            line-height: 1.02
+        }
+
+        /* Profile */
+        .profile-pic {
+            width: 170px;
+            height: 170px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+            flex-shrink: 0
+        }
+
+        .tagline {
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 6px
+        }
+
+        /* Info list */
+        .info-list {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .info-item {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--muted)
+        }
+
+        /* Story paragraph style */
+        .story {
+            color: #dbe9ff;
+            opacity: 0.95;
+            line-height: 1.6;
+            margin-top: 18px;
+            font-size: 15.5px
+        }
+
+        /* Floating numbers (school) */
+        .float-number {
+            position: absolute;
+            font-weight: 800;
+            font-family: 'Playfair Display';
+            opacity: 0.08;
+            font-size: 80px;
+            color: #fff;
+            filter: blur(0.2px);
+            transform: translate3d(0, 0, 0);
+            pointer-events: none
+        }
+
+        /* Gallery */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .grid img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 12px;
+            transform-origin: center;
+            transition: transform .45s cubic-bezier(.2, .9, .3, 1), opacity .35s
+        }
+
+        .grid .item {
+            position: relative;
+            overflow: hidden
+        }
+
+        .grid .item .caption {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.25));
+            font-size: 13px;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all .28s cubic-bezier(.2, .9, .3, 1)
+        }
+
+        .grid .item:hover img {
+            transform: scale(1.06) rotate(-0.6deg);
+            opacity: 0.98
+        }
+
+        .grid .item:hover .caption {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        /* Footer */
+        footer {
+            padding: 36px 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
+            border-top: 1px solid rgba(255, 255, 255, 0.02)
+        }
+
+        .social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            margin-right: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: transform .25s, background .25s
+        }
+
+        .social a:hover {
+            transform: translateY(-6px);
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #071227
+        }
+
+        /* responsive */
+        @media (max-width:900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .profile-pic {
+                width: 130px;
+                height: 130px
+            }
+
+            .container {
+                padding: 36px 18px
+            }
+        }
+
+        @media (max-width:520px) {
+            header {
+                top: 12px;
+                padding: 6px 10px
+            }
+
+            .brand .logo {
+                width: 38px;
+                height: 38px
+            }
+
+            .title-serif {
+                font-size: 22px
+            }
+
+            .grid img {
+                height: 140px
+            }
+
+            .grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        /* subtle cubic-bezier ease */
+        .ease-sub {
+            transition: all .45s cubic-bezier(.22, .95, .31, 1)
+        }
+
+        .btn-cta {
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #071227;
+            box-shadow: 0 6px 30px rgba(124, 92, 255, 0.12)
+        }
+
+        .ghost {
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 10px 14px;
+            border-radius: 12px
+        }
+
+        /* scroll to top */
+        #toTop {
+            position: fixed;
+            right: 18px;
+            bottom: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 60;
+            box-shadow: var(--neon);
+            cursor: pointer;
+            backdrop-filter: blur(6px)
+        }
+
+        #toTop:hover {
+            transform: translateY(-6px)
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Progress bar -->
+    <div id="progress" aria-hidden="true"></div>
+
+    <!-- Loader -->
+    <div id="loader" role="status" aria-live="polite">
+        <div style="text-align:center">
+            <div class="lds-ring" aria-hidden="true">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div style="margin-top:14px;color:var(--muted);letter-spacing:1px">Crafting the story...</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <div class="logo">RP</div>
+            <div style="line-height:1">
+                <div style="font-weight:700">Rushi Parekh</div>
+                <div style="font-size:12px;color:var(--muted)">Cinematic Matrimony</div>
+            </div>
+        </div>
+        <nav style="display:flex;gap:8px;margin-left:18px">
+            <a class="nav-pill" href="#basic">About</a>
+            <a class="nav-pill" href="#school">School</a>
+            <a class="nav-pill" href="#college">College</a>
+            <a class="nav-pill" href="#work">Career</a>
+            <a class="nav-pill" href="#chess">Chess</a>
+            <a class="nav-pill" href="#rides">Cars & Bikes</a>
+            <a class="nav-pill" href="#movies">Movies</a>
+            <a class="nav-pill" href="#gallery">Gallery</a>
+        </nav>
+    </header>
+
+    <!-- Hero / Basic Info -->
+    <section id="basic" class="panel" data-section="basic">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg');transform:scale(1.08)">
+        </div>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="glass-card ease-sub" data-aos="fade-up" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="profile-pic" style="flex-basis:170px">
+                        <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="Profile photo"
+                            style="width:100%;height:100%;object-fit:cover;display:block">
+                    </div>
+                    <div style="flex:1">
+                        <div class="title-serif">Rushi Parekh — <span
+                                style="font-weight:600;color:var(--accent)">Dreamer • Thinker • Builder</span></div>
+                        <div class="tagline">28 • Mumbai, India • Software Engineer</div>
+                        <div class="info-list" aria-hidden="false">
+                            <div class="info-item"><i class="fa-solid fa-briefcase"
+                                    style="margin-right:6px;color:var(--accent)"></i> Backend Engineer</div>
+                            <div class="info-item"><i class="fa-solid fa-map-marker-alt"
+                                    style="margin-right:6px;color:var(--accent-2)"></i> Mumbai</div>
+                            <div class="info-item"><i class="fa-solid fa-graduation-cap"
+                                    style="margin-right:6px;color:#ffd080"></i> B.Tech — Computer Engg.</div>
+                            <div class="info-item"><i class="fa-solid fa-chess"
+                                    style="margin-right:6px;color:#a0ffcf"></i> Chess Enthusiast</div>
+                        </div>
+
+                        <p class="story" style="margin-bottom:12px">
+                            He moves through life like a quiet night drive — thoughtful, steady, and open to the
+                            possibilities of the road ahead.
+                            A listener who builds things that matter, Rushi believes in simple gestures, deeper
+                            conversations, and shared curiosity.
+                            This page is a cinematic introduction — small scenes from a life shaped by code, stories,
+                            strategy, and the thrill of motion.
+                        </p>
+
+                        <div style="display:flex;gap:10px;align-items:center">
+                            <a href="#gallery" class="btn-cta ease-sub"><i
+                                    class="fa-solid fa-camera-retro"></i><span>View Moments</span></a>
+                            <a class="ghost ease-sub" href="#work"><i class="fa-solid fa-code"></i> Read My Story</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schooling -->
+    <section id="school" class="panel" data-section="school">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg');filter:grayscale(0.05)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.48), rgba(2,3,6,0.72));"></div>
+        <!-- floating numbers for visual flair -->
+        <div class="float-number" style="left:6%;top:18%" data-speed="0.8">7</div>
+        <div class="float-number" style="right:8%;top:26%" data-speed="1.3">1</div>
+        <div class="float-number" style="left:18%;bottom:16%" data-speed="1.1">9</div>
+
+        <div class="container">
+            <div class="glass-card" data-aos="fade-right" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row items-start gap-8">
+                    <div style="flex:1">
+                        <div class="title-serif">The First Equation</div>
+                        <p class="tagline" style="color:var(--muted)">Schooling — where curiosity began</p>
+                        <p class="story">
+                            There was a time when numbers felt like tiny secret doors — each problem a lock waiting for
+                            the right key.
+                            School wasn't just classrooms and chalk. It was the thrill of that first solved equation,
+                            the quiet joy of patterns, and the patient curiosity that turned questions into tools.
+                            Rushi remembers afternoons bent over puzzles, the logic of math shaping how he would later
+                            read code and find beauty in structure.
+                        </p>
+                    </div>
+                    <div style="width:320px;flex-shrink:0" data-aos="zoom-in" data-aos-duration="900">
+                        <div
+                            style="background:var(--glass);border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03)">
+                            <div style="font-weight:800;font-family:'Playfair Display';font-size:22px">Little numbers,
+                                big dreams</div>
+                            <div style="margin-top:10px;color:var(--muted)">Highlights</div>
+                            <ul style="margin-top:10px;color:#e6eef6;line-height:1.7">
+                                <li>Top of class in mathematics and logic exercises</li>
+                                <li>Science fair projects — building simple machines</li>
+                                <li>Curiosity-led experiments with tiny circuits</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- College Days -->
+    <section id="college" class="panel" data-section="college">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg');transform:scale(1.04)">
+        </div>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-left" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">Compilers & Coffee</div>
+                        <p class="tagline" style="color:var(--muted)">College days — discovery of a craft</p>
+                        <p class="story">
+                            College was a laboratory of late nights and small triumphs. Code became a language to shape
+                            ideas — a way to make abstract thoughts run and respond.
+                            Between project deadlines and campus festivals, Rushi found a rhythm: a problem, a stack of
+                            notes, a cup of coffee, and the quiet satisfaction of a program that finally behaved.
+                            It was here he learned that building software is equal parts logic and poetry.
+                        </p>
+                        <div style="margin-top:12px">
+                            <div id="typeCode" style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "><code
+                                    class="text-sm"
+                                    style="display:inline-block;padding:8px 12px;border-radius:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.02)">const passion = "build elegant systems"</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width:360px;flex-shrink:0;position:relative">
+                        <div
+                            style="height:220px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 40px rgba(0,0,0,0.6)">
+                            <img src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
+                                alt="College coding" style="width:100%;height:100%;object-fit:cover;display:block">
+                        </div>
+
+                        <!-- small code card -->
+                        <div style="position:absolute;left:14px;bottom:-20px;transform:translateY(0);width:calc(100% - 28px)"
+                            data-aos="fade-up" data-aos-delay="200">
+                            <div class="glass-card" style="padding:12px;border-radius:12px">
+                                <div style="font-weight:700;font-size:13px">Campus Projects</div>
+                                <div style="color:var(--muted);font-size:13px;margin-top:6px">
+                                    Open-source contributions, hackathons, and a love for clean, modular code.
+                                </div>
+                                <div style="margin-top:10px;display:flex;gap:8px">
+                                    <span class="info-item"><i class="fa-solid fa-trophy"
+                                            style="margin-right:6px;color:#ffd080"></i> Hackathon finalist</span>
+                                    <span class="info-item"><i class="fa-solid fa-code"
+                                            style="margin-right:6px;color:var(--accent)"></i> OSS contributor</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Engineer / Career -->
+    <section id="work" class="panel" data-section="work">
+        <canvas id="binaryCanvas" style="position:absolute;inset:0;z-index:3;pointer-events:none"></canvas>
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg');filter:brightness(0.8)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.7));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="zoom-in" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <div style="flex:1">
+                        <div class="title-serif">First Deploy</div>
+                        <p class="tagline" style="color:var(--muted)">From curious student to software engineer</p>
+                        <p class="story">
+                            The first time code met production the room felt both small and infinite. An anxious push, a
+                            heartbeat of logs, and then — a feature humming in the wild.
+                            Over the years Rushi has learned the tender balance between pragmatism and craft: shipping
+                            with care, reading telemetry like a map, and always making room to learn.
+                            Building resilient systems taught patience; mentoring juniors taught empathy. The career is
+                            less a ladder and more a sequence of doors opened thoughtfully.
+                        </p>
+
+                        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+                            <div class="info-item"><i class="fa-solid fa-server"
+                                    style="margin-right:8px;color:#a0ffcf"></i> Distributed Systems</div>
+                            <div class="info-item"><i class="fa-solid fa-shield"
+                                    style="margin-right:8px;color:#ffd080"></i> Reliability</div>
+                            <div class="info-item"><i class="fa-solid fa-tools"
+                                    style="margin-right:8px;color:var(--accent)"></i> APIs & Microservices</div>
+                        </div>
+                    </div>
+
+                    <div style="width:320px;flex-shrink:0">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
+                                alt="Workstation" style="width:100%;height:220px;object-fit:cover;display:block">
+                        </div>
+                        <div style="margin-top:12px" data-aos="fade-up">
+                            <div class="ghost" style="display:flex;align-items:center;justify-content:space-between">
+                                <div>
+                                    <div style="font-weight:800">First Production Feature</div>
+                                    <div style="color:var(--muted);font-size:13px">A small but meaningful improvement
+                                        that scaled.</div>
+                                </div>
+                                <div style="text-align:right">
+                                    <div style="font-weight:800;font-size:18px;color:var(--accent)">+99%</div>
+                                    <div style="color:var(--muted);font-size:12px">Uptime</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chess -->
+    <section id="chess" class="panel" data-section="chess">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/260024/pexels-photo-260024.jpeg');filter:brightness(0.42)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.6), rgba(2,3,6,0.86));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-right">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">A Thousand Quiet Games</div>
+                        <p class="tagline" style="color:var(--muted)">Learning patience, one move at a time</p>
+                        <p class="story">
+                            Chess taught strategy before the word felt grand — it taught patience. Each loss was a
+                            lesson stitched into the next plan.
+                            From casual games at dusk to careful study of openings, Rushi climbed to a thoughtful 1000
+                            ELO, not for trophies, but for the ritual of concentration and the slow joy of improvement.
+                            The board is a small theater where every piece tells a story.
+                        </p>
+
+                        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+                            <div class="info-item"><i class="fa-solid fa-chess-knight"
+                                    style="margin-right:8px;color:#a0ffcf"></i> Strategy</div>
+                            <div class="info-item"><i class="fa-solid fa-hourglass"
+                                    style="margin-right:8px;color:#ffd080"></i> Patience</div>
+                            <div class="info-item"><i class="fa-solid fa-brain"
+                                    style="margin-right:8px;color:var(--accent)"></i> Pattern Recognition</div>
+                        </div>
+                    </div>
+                    <div style="width:280px;flex-shrink:0" data-aos="zoom-in">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="https://images.pexels.com/photos/260024/pexels-photo-260024.jpeg" alt="chess"
+                                style="width:100%;height:220px;object-fit:cover;display:block;filter:contrast(0.9)">
+                        </div>
+                        <div style="margin-top:10px;display:flex;gap:8px">
+                            <button class="ghost ease-sub"><i class="fa-solid fa-book-open"
+                                    style="margin-right:8px"></i>Favorite Opening</button>
+                            <button class="btn-cta ease-sub"><i class="fa-solid fa-wand-magic-sparkles"
+                                    style="margin-right:8px"></i>Practice Ritual</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fitness -->
+    <section id="fitness" class="panel" data-section="fitness">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/416778/pexels-photo-416778.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900');transform:scale(1.03)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.8));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-up" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">Calm Strength</div>
+                        <p class="tagline" style="color:var(--muted)">Fitness — crafted through movement, not mass</p>
+                        <p class="story"> Fitness for Rushi is a quiet, steady practice — the kind that prefers control
+                            over excess
+                            and function over flash. Years of calisthenics taught him to value strength that moves you:
+                            clean pull-ups,
+                            deliberate progressions, and mobility that lets you live freely. It's not about looking
+                            bigger — it's about
+                            feeling capable, balanced, and resilient in everyday moments. His sessions are short,
+                            consistent, and
+                            focused on skillful progression: mastering movement before chasing size. </p>
+                        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+                            <div class="info-item"><i class="fa-solid fa-dumbbell"
+                                    style="margin-right:8px;color:#ffd080"></i>
+                                Calisthenics & Bodyweight</div>
+                            <div class="info-item"><i class="fa-solid fa-person-running"
+                                    style="margin-right:8px;color:var(--accent)"></i> Mobility & Conditioning</div>
+                            <div class="info-item"><i class="fa-solid fa-seedling"
+                                    style="margin-right:8px;color:#a0ffcf"></i> Strength
+                                over Bulk</div>
+                        </div>
+
+                        <div style="margin-top:14px">
+                            <div class="ghost" style="display:inline-flex;align-items:center;gap:10px">
+                                <i class="fa-solid fa-stopwatch"></i>
+                                <div style="text-align:left">
+                                    <div style="font-weight:800">Training Ritual</div>
+                                    <div style="color:var(--muted);font-size:13px">Short daily habits: skill work,
+                                        mobility flows, and
+                                        progressive resistance.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="width:320px;flex-shrink:0" data-aos="zoom-in">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="https://images.pexels.com/photos/2261477/pexels-photo-2261477.jpeg?auto=compress&cs=tinysrgb&w=800&h=520"
+                                alt="Calisthenics training"
+                                style="width:100%;height:220px;object-fit:cover;display:block">
+                        </div>
+                        <div style="margin-top:10px;color:var(--muted)">
+                            <div style="font-weight:800">Why Calisthenics?</div>
+                            <div>Durable movement, elegant strength, and the freedom to train anywhere.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Cars & Bikes -->
+    <section id="rides" class="panel" data-section="rides">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg');transform:scale(1.06);filter:contrast(1.08)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.48), rgba(0,0,0,0.72));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-left">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">Throttle & Sunset</div>
+                        <p class="tagline" style="color:var(--muted)">A love for speed, design & open roads</p>
+                        <p class="story">
+                            The engine's rumble is where focus sharpens and the day's chatter falls away. Cars and bikes
+                            are more than machines — they are conversations in metal and motion.
+                            Whether it’s the subtle geometry of a sports car or the clean silhouette of a motorcycle,
+                            Rushi appreciates design that moves the heart as much as the body.
+                            Weekend drives, careful modifications, and the quiet pride of a well-loved ride are part of
+                            this story.
+                        </p>
+                        <div style="margin-top:12px;display:flex;gap:8px">
+                            <div class="info-item"><i class="fa-solid fa-car-side"
+                                    style="margin-right:8px;color:#ffd080"></i>Design Aesthetics</div>
+                            <div class="info-item"><i class="fa-solid fa-road"
+                                    style="margin-right:8px;color:var(--accent)"></i>Road Trips</div>
+                            <div class="info-item"><i class="fa-solid fa-tools"
+                                    style="margin-right:8px;color:#a0ffcf"></i>Maintenance</div>
+                        </div>
+                    </div>
+                    <div style="width:320px;flex-shrink:0" data-aos="zoom-in">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg" alt="ride"
+                                style="width:100%;height:220px;object-fit:cover;display:block">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movies & Web Series -->
+    <section id="movies" class="panel" data-section="movies">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/799137/pexels-photo-799137.jpeg');filter:brightness(0.6)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.5), rgba(2,3,6,0.85));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-up">
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <div style="flex:1">
+                        <div class="title-serif">Stories That Linger</div>
+                        <p class="tagline" style="color:var(--muted)">Action, thriller, mystery & fantasy</p>
+                        <p class="story">
+                            Films and series are Rushi's private classrooms of character and possibility. He loves
+                            action that moves the pulse, mysteries that twist expectations, and fantasy that expands
+                            wonder.
+                            A lifelong fan of epic narratives, "Game of Thrones" holds a special place — not for
+                            spectacle alone, but for how characters become mirrors for choice, courage, and consequence.
+                        </p>
+                        <div style="margin-top:12px">
+                            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                                <div class="info-item"><i class="fa-solid fa-film"
+                                        style="margin-right:8px;color:#ffd080"></i>Action & Thrillers</div>
+                                <div class="info-item"><i class="fa-solid fa-mask"
+                                        style="margin-right:8px;color:var(--accent)"></i>Fantasy Fiction</div>
+                                <div class="info-item"><i class="fa-solid fa-tv"
+                                        style="margin-right:8px;color:#a0ffcf"></i>Deep Characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="width:320px;flex-shrink:0" data-aos="flip-left">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="https://images.pexels.com/photos/799137/pexels-photo-799137.jpeg" alt="movies"
+                                style="width:100%;height:220px;object-fit:cover;display:block">
+                        </div>
+                        <div style="margin-top:12px;color:var(--muted)">
+                            <div style="font-weight:800">All-time Favourite</div>
+                            <div>Game of Thrones — for complex characters and sweeping stories</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section id="gallery" class="panel" data-section="gallery">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg');filter:brightness(0.55)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.5), rgba(2,3,6,0.8));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-up">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div class="title-serif">Moments</div>
+                        <div class="tagline" style="color:var(--muted)">A small gallery — fragments from the road</div>
+                    </div>
+                    <div>
+                        <button class="ghost" onclick="shuffleGallery()"><i class="fa-solid fa-shuffle"></i>
+                            Shuffle</button>
+                        <a href="#basic" class="btn-cta"><i class="fa-solid fa-arrow-up"></i> Connect</a>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px">
+                    <div class="grid" id="photoGrid">
+                        <div class="item" data-aos="zoom-in" data-aos-delay="50">
+                            <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="pic1">
+                            <div class="caption">Quiet afternoon</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="100">
+                            <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="pic2">
+                            <div class="caption">Sunset drive</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="150">
+                            <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="pic3">
+                            <div class="caption">Notes & Coffee</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="200">
+                            <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="pic4">
+                            <div class="caption">Roadside silence</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="250">
+                            <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="pic5">
+                            <div class="caption">Two-wheeled joy</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="300">
+                            <img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" alt="pic6">
+                            <div class="caption">Late-night pages</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container" style="max-width:1100px">
+            <div style="display:flex;flex-direction:column;gap:18px">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
+                    <div>
+                        <div style="font-weight:800;font-size:20px">Let's keep it simple</div>
+                        <div style="color:var(--muted)">If you'd like to reach out — here's a gentle hello.</div>
+                    </div>
+
+                    <div class="social" style="display:flex;align-items:center">
+                        <a href="#" title="LinkedIn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" title="Instagram" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" title="GitHub" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" title="Mail" aria-label="Mail"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
+                    <div style="color:var(--muted)">© <span id="year"></span> Rushi Parekh. Crafted with care.</div>
+                    <div style="display:flex;gap:12px">
+                        <a class="ghost" href="#basic">About</a>
+                        <a class="ghost" href="#gallery">Gallery</a>
+                        <a class="ghost" href="#movies">Favorites</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to top -->
+    <div id="toTop" title="Back to top" aria-hidden="false">
+        <i class="fa-solid fa-arrow-up" style="color:var(--muted)"></i>
+    </div>
+
+    <!-- JS (embedded) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize content, AOS and simple interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // AOS init
+            AOS.init({ once: true, duration: 800, easing: 'cubic-bezier(.22,.95,.31,1)' });
+
+            // Loader hide after small delay to let animations breathe
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if (loader) loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 650);
+            }, 900);
+
+            // Scroll progress bar
+            const progress = document.getElementById('progress');
+            window.addEventListener('scroll', () => {
+                const h = document.documentElement;
+                const percent = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+                progress.style.width = percent + '%';
+            });
+
+            // Smooth parallax using GSAP ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+            document.querySelectorAll('.bg-layer').forEach((bg, i) => {
+                let speed = 0.15 + (i % 3) * 0.06;
+                gsap.to(bg, {
+                    yPercent: -10 - (i % 2 === 0 ? 6 : 2),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: bg.parentElement,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 0.9
+                    }
+                });
+            });
+
+            // Entrance subtle animations on header
+            gsap.from('header', { y: -20, opacity: 0, duration: 0.9, ease: 'power3.out' });
+
+            // Typing effect for code snippet (college)
+            const codeText = 'const passion = "build elegant systems";';
+            const typeEl = document.querySelector('#typeCode code');
+            let idx = 0;
+            function typeLoop() {
+                if (idx <= codeText.length) {
+                    typeEl.textContent = codeText.slice(0, idx) + (idx % 2 === 0 ? '|' : '');
+                    idx++;
+                    setTimeout(typeLoop, 60);
+                } else {
+                    typeEl.textContent = codeText;
+                }
+            }
+            typeLoop();
+
+            // Gallery shuffle
+            window.shuffleGallery = function () {
+                const grid = document.getElementById('photoGrid');
+                for (let i = grid.children.length; i >= 0; i--) {
+                    grid.appendChild(grid.children[Math.random() * i | 0]);
+                }
+                AOS.refreshHard();
+            };
+
+            // Scroll to top
+            const toTop = document.getElementById('toTop');
+            toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            // show/hide toTop
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) toTop.style.transform = 'translateY(0)';
+                else toTop.style.transform = 'translateY(50px)';
+            });
+
+            // Hover neon glow on cta
+            document.querySelectorAll('.btn-cta').forEach(btn => {
+                btn.addEventListener('mouseenter', () => gsap.to(btn, { scale: 1.03, boxShadow: '0 10px 40px rgba(124,92,255,0.18)', duration: 0.35 }));
+                btn.addEventListener('mouseleave', () => gsap.to(btn, { scale: 1, boxShadow: '0 6px 30px rgba(124,92,255,0.12)', duration: 0.35 }));
+            });
+
+            // Floating numbers parallax subtle movement
+            document.querySelectorAll('.float-number').forEach(el => {
+                const s = parseFloat(el.getAttribute('data-speed') || '1');
+                gsap.to(el, {
+                    y: (s * -40) + 'px', ease: 'none', scrollTrigger: {
+                        trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 0.7
+                    }
+                });
+            });
+
+            // Photo hover caption animations handled in CSS; small tilt effect
+            document.querySelectorAll('.grid .item img').forEach(img => {
+                img.addEventListener('mousemove', (e) => {
+                    const r = img.getBoundingClientRect();
+                    const px = (e.clientX - r.left) / r.width;
+                    const py = (e.clientY - r.top) / r.height;
+                    gsap.to(img, { rotationX: (py - 0.5) * 3, rotationY: (px - 0.5) * 3, transformPerspective: 800, duration: 0.6, ease: 'power2.out' });
+                });
+                img.addEventListener('mouseleave', () => gsap.to(img, { rotationX: 0, rotationY: 0, duration: 0.6 }));
+            });
+
+            // Binary rain canvas for work section
+            initBinaryCanvas();
+        });
+
+        // Binary rain implementation (subtle)
+        function initBinaryCanvas() {
+            const canvas = document.getElementById('binaryCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let W = canvas.width = window.innerWidth;
+            let H = canvas.height = window.innerHeight;
+            let columns = Math.floor(W / 20);
+            let drops = [];
+            for (let i = 0; i < columns; i++) drops[i] = Math.floor(Math.random() * H / 20);
+
+            function draw() {
+                ctx.fillStyle = "rgba(0,0,0,0)";
+                ctx.fillRect(0, 0, W, H);
+                ctx.fillStyle = "rgba(0, 229, 255, 0.04)";
+                ctx.font = "14px monospace";
+                for (let i = 0; i < drops.length; i++) {
+                    const text = Math.random() > 0.5 ? '0' : '1';
+                    ctx.fillText(text, i * 20, drops[i] * 20);
+                    if (drops[i] * 20 > H && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }
+            let raf;
+            function loop() {
+                draw();
+                raf = requestAnimationFrame(loop);
+            }
+            loop();
+            window.addEventListener('resize', () => {
+                cancelAnimationFrame(raf);
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+                columns = Math.floor(W / 20);
+                drops = [];
+                for (let i = 0; i < columns; i++) drops[i] = Math.floor(Math.random() * H / 20);
+                loop();
+            });
+        }
+
+        // small accessibility: keyboard toTop
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Home') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        // small smooth scroll for anchor nav (works for browsers without native smooth)
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                const href = a.getAttribute('href');
+                if (href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+    </script>
+
+    <!-- AOS init end -->
+    <script>
+        // Ensure AOS refresh after content loaded
+        window.addEventListener('load', function () { AOS.refresh(); });
+    </script>
+
+</body>
+
+</html>
