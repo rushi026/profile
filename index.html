@@ -437,6 +437,148 @@
         #toTop:hover {
             transform: translateY(-6px)
         }
+
+        /* --- Responsive header & mobile nav fixes --- */
+
+        /* keep existing desktop header behavior by default */
+
+        /* mobile: disable fixed positioning and hide desktop nav */
+        @media (max-width: 720px) {
+            header.site-header {
+                position: static !important;
+                left: auto !important;
+                transform: none !important;
+                top: auto !important;
+                margin: 12px 14px;
+                width: auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 12px;
+                z-index: 60;
+                border-radius: 12px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.008));
+                backdrop-filter: blur(6px);
+                box-shadow: 0 8px 30px rgba(2, 3, 8, 0.45);
+            }
+
+            /* hide desktop nav pills on small screens */
+            .desktop-nav {
+                display: none
+            }
+
+            /* show menu toggle button */
+            .menu-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.02);
+                border: 0;
+                color: var(--muted);
+                font-size: 18px
+            }
+
+            .menu-toggle:focus {
+                outline: 2px solid rgba(124, 92, 255, 0.18);
+            }
+
+            /* mobile nav full-screen panel */
+            .mobile-nav {
+                position: fixed;
+                inset: 0;
+                z-index: 120;
+                background: linear-gradient(180deg, rgba(2, 3, 6, 0.92), rgba(2, 3, 6, 0.98));
+                display: flex;
+                flex-direction: column;
+                padding: 40px 20px;
+                transform: translateY(-8%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all .36s cubic-bezier(.22, .95, .31, 1);
+            }
+
+            .mobile-nav.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .mobile-nav .menu-close {
+                align-self: flex-end;
+                background: transparent;
+                border: 0;
+                color: var(--muted);
+                font-size: 22px;
+                padding: 8px;
+            }
+
+            .mobile-links {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                margin-top: 26px;
+                align-items: flex-start
+            }
+
+            .mobile-links a {
+                font-size: 20px;
+                color: #e6eef6;
+                text-decoration: none;
+                padding: 10px 6px;
+                border-radius: 10px;
+                display: block
+            }
+
+            .mobile-links a:hover {
+                color: white;
+                background: rgba(255, 255, 255, 0.02)
+            }
+        }
+
+        /* auto-hide header on scroll down for small screens */
+        @media (max-width: 720px) {
+            .site-header.hidden-on-scroll {
+                transform: translateY(-110%) !important;
+                transition: transform .32s cubic-bezier(.22, .95, .31, 1);
+            }
+        }
+
+        @media (min-width: 721px) {
+
+            /* Hide mobile fullscreen nav on desktop entirely */
+            .mobile-nav {
+                display: none !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+                transform: translateY(0) !important;
+            }
+
+            /* Hide the hamburger toggle on desktop */
+            .menu-toggle {
+                display: none !important;
+            }
+
+            /* Ensure desktop nav is visible (in case any rule hid it) */
+            .desktop-nav {
+                display: flex !important;
+                gap: 8px;
+                align-items: center;
+            }
+
+            /* Restore fixed desktop header position (if you had it before) */
+            .site-header {
+                position: fixed !important;
+                top: 18px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                margin: 0 !important;
+                width: auto !important;
+                z-index: 70 !important;
+            }
+        }
     </style>
 </head>
 
@@ -459,15 +601,15 @@
     </div>
 
     <!-- Header -->
-    <header>
+    <header class="site-header">
         <div class="brand">
             <div class="logo">RP</div>
             <div style="line-height:1">
                 <div style="font-weight:700">Rushi Parekh</div>
-                <div style="font-size:12px;color:var(--muted)">Cinematic Matrimony</div>
+                <div style="font-size:12px;color:var(--muted)">Nature loves symmetry!</div>
             </div>
         </div>
-        <nav style="display:flex;gap:8px;margin-left:18px">
+        <nav class="desktop-nav" aria-label="Primary">
             <a class="nav-pill" href="#basic">About</a>
             <a class="nav-pill" href="#school">School</a>
             <a class="nav-pill" href="#college">College</a>
@@ -478,12 +620,32 @@
             <a class="nav-pill" href="#movies">Movies</a>
             <a class="nav-pill" href="#gallery">Gallery</a>
         </nav>
+        <!-- Mobile controls -->
+        <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </header>
+
+    <!-- Mobile full-screen nav (hidden by default) -->
+    <nav id="mobileNav" class="mobile-nav" aria-hidden="true" role="navigation">
+        <button id="menuClose" class="menu-close" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+        <div class="mobile-links">
+            <a href="#basic">About</a>
+            <a href="#school">School</a>
+            <a href="#college">College</a>
+            <a href="#work">Career</a>
+            <a href="#chess">Chess</a>
+            <a href="#fitness">Fitness</a>
+            <a href="#rides">Cars & Bikes</a>
+            <a href="#movies">Movies</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
 
     <!-- Hero / Basic Info -->
     <section id="basic" class="panel" data-section="basic">
-        <div class="bg-layer"
-            style="background-image:url('imgs/06.jpg');transform:scale(1.08)">
+        <div class="bg-layer" style="background-image:url('imgs/06.jpg');transform:scale(1.08)">
         </div>
         <div class="overlay"></div>
         <div class="container">
@@ -498,8 +660,8 @@
                                 style="font-weight:600;color:var(--accent)">Dreamer • Thinker • Builder</span></div>
                         <div class="tagline">24 • Ahmedabad, India • Software Engineer</div>
                         <div class="info-list" aria-hidden="false">
-                            <div class="info-item"><i class="fa-solid fa-cake"
-                                    style="margin-right:6px;color:brown"></i> 2nd June, 2001</div>
+                            <div class="info-item"><i class="fa-solid fa-cake" style="margin-right:6px;color:brown"></i>
+                                2nd June, 2001</div>
                             <div class="info-item"><i class="fa-solid fa-briefcase"
                                     style="margin-right:6px;color:var(--accent)"></i> Software Engineer</div>
                             <div class="info-item"><i class="fa-solid fa-map-marker-alt"
@@ -534,8 +696,7 @@
 
     <!-- Schooling -->
     <section id="school" class="panel" data-section="school">
-        <div class="bg-layer"
-            style="background-image:url('imgs/12.jpg');filter:grayscale(0.05)">
+        <div class="bg-layer" style="background-image:url('imgs/12.jpg');filter:grayscale(0.05)">
         </div>
         <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.48), rgba(2,3,6,0.72));"></div>
         <!-- floating numbers for visual flair -->
@@ -605,8 +766,8 @@
                     <div style="width:360px;flex-shrink:0;position:relative">
                         <div
                             style="height:280px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 40px rgba(0,0,0,0.6)">
-                            <img src="imgs/18.jpg"
-                                alt="College coding" style="width:100%;height:100%;object-fit:cover;display:block">
+                            <img src="imgs/18.jpg" alt="College coding"
+                                style="width:100%;height:100%;object-fit:cover;display:block">
                         </div>
 
                         <!-- small code card -->
@@ -666,8 +827,8 @@
 
                     <div style="width:320px;flex-shrink:0">
                         <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
-                            <img src="imgs/13.jpg"
-                                alt="Workstation" style="width:100%;height:280px;object-fit:cover;display:block">
+                            <img src="imgs/13.jpg" alt="Workstation"
+                                style="width:100%;height:280px;object-fit:cover;display:block">
                         </div>
                         <div style="margin-top:12px" data-aos="fade-up">
                             <div class="ghost" style="display:flex;align-items:center;justify-content:space-between">
@@ -781,8 +942,7 @@
 
                     <div style="width:320px;flex-shrink:0" data-aos="zoom-in">
                         <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
-                            <img src="imgs/05.jpg"
-                                alt="Calisthenics training"
+                            <img src="imgs/05.jpg" alt="Calisthenics training"
                                 style="width:100%;height:220px;object-fit:cover;display:block">
                         </div>
                         <div style="margin-top:10px;color:var(--muted)">
@@ -961,10 +1121,14 @@
                     </div>
 
                     <div class="social" style="display:flex;align-items:center">
-                        <a target="_blank" href="https://www.linkedin.com/in/rushiraj-parekh/" title="LinkedIn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a target="_blank" href="https://www.instagram.com/_rushiparekh/" title="Instagram" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                        <a target="_blank" href="#" title="GitHub" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                        <a target="_blank" href="rushiparekh026@gmail.com" title="Mail" aria-label="Mail"><i class="fa-solid fa-envelope"></i></a>
+                        <a target="_blank" href="https://www.linkedin.com/in/rushiraj-parekh/" title="LinkedIn"
+                            aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a target="_blank" href="https://www.instagram.com/_rushiparekh/" title="Instagram"
+                            aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a target="_blank" href="#" title="GitHub" aria-label="GitHub"><i
+                                class="fa-brands fa-github"></i></a>
+                        <a target="_blank" href="rushiparekh026@gmail.com" title="Mail" aria-label="Mail"><i
+                                class="fa-solid fa-envelope"></i></a>
                     </div>
                 </div>
 
@@ -1162,6 +1326,96 @@
         window.addEventListener('load', function () { AOS.refresh(); });
     </script>
 
+    <script>
+        (function () {
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            const menuClose = document.getElementById('menuClose');
+            const header = document.querySelector('.site-header');
+
+            // Toggle mobile nav
+            function openMenu() {
+                mobileNav.classList.add('open');
+                mobileNav.setAttribute('aria-hidden', 'false');
+                menuToggle.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden'; // prevent page scroll when nav open
+            }
+            function closeMenu() {
+                mobileNav.classList.remove('open');
+                mobileNav.setAttribute('aria-hidden', 'true');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            if (menuToggle) { menuToggle.addEventListener('click', openMenu); }
+            if (menuClose) { menuClose.addEventListener('click', closeMenu); }
+            // Close mobile nav on internal link click
+            document.querySelectorAll('#mobileNav a[href^="#"]').forEach(a => {
+                a.addEventListener('click', () => {
+                    closeMenu();
+                    // small delay to allow nav close animation before scrolling
+                    setTimeout(() => { const target = document.querySelector(a.getAttribute('href')); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 250);
+                });
+            });
+
+            // Auto-hide header on mobile when scrolling down, show on scroll up
+            let lastScroll = 0;
+            let ticking = false;
+            function onScroll() {
+                const w = window.innerWidth || document.documentElement.clientWidth;
+                if (w > 720) return; // only active on small screens
+                const current = window.scrollY;
+                if (current <= 40) {
+                    header.classList.remove('hidden-on-scroll');
+                    lastScroll = current;
+                    return;
+                }
+                if (current > lastScroll && current > 80) {
+                    // scrolling down
+                    header.classList.add('hidden-on-scroll');
+                } else {
+                    // scrolling up
+                    header.classList.remove('hidden-on-scroll');
+                }
+                lastScroll = current;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) { window.requestAnimationFrame(() => { onScroll(); ticking = false; }); ticking = true; }
+            }, { passive: true });
+
+            // ensure header resets if window resized to large
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 720) {
+                    mobileNav.classList.remove('open');
+                    header.classList.remove('hidden-on-scroll');
+                    document.body.style.overflow = '';
+                }
+            });
+        })();
+    </script>
+
+    <script>
+        /* Ensure mobile nav is closed when on desktop (load + resize) */
+        (function () {
+            function ensureDesktopState() {
+                const mobileNav = document.getElementById('mobileNav');
+                const menuToggle = document.getElementById('menuToggle');
+                if (window.innerWidth > 720) {
+                    if (mobileNav) {
+                        mobileNav.classList.remove('open');
+                        mobileNav.setAttribute('aria-hidden', 'true');
+                    }
+                    if (menuToggle) {
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                    // restore scroll if it was locked
+                    document.body.style.overflow = '';
+                }
+            }
+            window.addEventListener('load', ensureDesktopState);
+            window.addEventListener('resize', ensureDesktopState);
+        })();
+    </script>
 </body>
 
 </html>
