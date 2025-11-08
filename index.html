@@ -1,0 +1,1421 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Rushi Parekh</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CDN (for rapid layout + utility classes) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Simple reset + base -->
+    <style>
+        :root {
+            --bg: #05060a;
+            --card: #0b0d12;
+            --muted: #9aa3b2;
+            --accent: #7c5cff;
+            --accent-2: #00e5ff;
+            --glass: rgba(255, 255, 255, 0.04);
+            --neon: 0 0 18px rgba(124, 92, 255, 0.12), 0 0 40px rgba(0, 229, 255, 0.04);
+            --glass-2: linear-gradient(135deg, rgba(124, 92, 255, 0.06), rgba(0, 229, 255, 0.02));
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(124, 92, 255, 0.03), transparent), radial-gradient(800px 400px at 90% 90%, rgba(0, 229, 255, 0.02), transparent), var(--bg);
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color: #e6eef6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        a {
+            color: inherit
+        }
+
+        /* Top progress bar */
+        #progress {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            width: 0;
+            z-index: 60;
+            border-bottom-right-radius: 6px
+        }
+
+        /* Loader overlay */
+        #loader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(5, 6, 10, 0.88), rgba(5, 6, 10, 0.95));
+            z-index: 80;
+            backdrop-filter: blur(6px)
+        }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 96px;
+            height: 96px
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            margin: 8px;
+            border: 6px solid transparent;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(.65, .05, .36, 1) infinite
+        }
+
+        .lds-ring div:nth-child(2) {
+            border: 6px solid transparent;
+            border-right-color: var(--accent-2);
+            animation-delay: -0.45s
+        }
+
+        .lds-ring div:nth-child(3) {
+            border: 6px solid transparent;
+            border-bottom-color: rgba(124, 92, 255, 0.9);
+            animation-delay: -0.3s
+        }
+
+        .lds-ring div:nth-child(4) {
+            border: 6px solid transparent;
+            border-left-color: rgba(0, 229, 255, 0.75);
+            animation-delay: -0.15s
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 70;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            padding: 8px 14px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border-radius: 14px;
+            box-shadow: var(--neon);
+            backdrop-filter: blur(6px)
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #071227;
+            font-family: Playfair Display
+        }
+
+        .nav-pill {
+            font-size: 13px;
+            color: var(--muted);
+            padding: 8px 10px;
+            border-radius: 10px
+        }
+
+        .nav-pill:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.02)
+        }
+
+        /* Hero / Section base */
+        section.panel {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .bg-layer {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: contrast(0.9) saturate(1.05);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: 1
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(2, 3, 6, 0.55), rgba(2, 3, 6, 0.7));
+            z-index: 2
+        }
+
+        .container {
+            position: relative;
+            z-index: 6;
+            max-width: 1100px;
+            padding: 56px 24px
+        }
+
+        /* Card look */
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 28px;
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 30px rgba(2, 3, 8, 0.6)
+        }
+
+        .title-serif {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            font-size: clamp(26px, 4.4vw, 40px);
+            line-height: 1.02
+        }
+
+        /* Profile */
+        .profile-pic {
+            width: 170px;
+            height: 170px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+            flex-shrink: 0
+        }
+
+        .tagline {
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 6px
+        }
+
+        /* Info list */
+        .info-list {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .info-item {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--muted)
+        }
+
+        /* Story paragraph style */
+        .story {
+            color: #dbe9ff;
+            opacity: 0.95;
+            line-height: 1.6;
+            margin-top: 18px;
+            font-size: 15.5px
+        }
+
+        /* Floating numbers (school) */
+        .float-number {
+            position: absolute;
+            font-weight: 800;
+            font-family: 'Playfair Display';
+            opacity: 0.08;
+            font-size: 80px;
+            color: #fff;
+            filter: blur(0.2px);
+            transform: translate3d(0, 0, 0);
+            pointer-events: none
+        }
+
+        /* Gallery */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .grid img {
+            width: 100%;
+            height: 390px;
+            object-fit: cover;
+            border-radius: 12px;
+            transform-origin: center;
+            transition: transform .45s cubic-bezier(.2, .9, .3, 1), opacity .35s
+        }
+
+        .grid .item {
+            position: relative;
+            overflow: hidden
+        }
+
+        .grid .item .caption {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.25));
+            font-size: 13px;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all .28s cubic-bezier(.2, .9, .3, 1)
+        }
+
+        .grid .item:hover img {
+            transform: scale(1.06) rotate(-0.6deg);
+            opacity: 0.98
+        }
+
+        .grid .item:hover .caption {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        /* Footer */
+        footer {
+            padding: 36px 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
+            border-top: 1px solid rgba(255, 255, 255, 0.02)
+        }
+
+        .social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            margin-right: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: transform .25s, background .25s
+        }
+
+        .social a:hover {
+            transform: translateY(-6px);
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #071227
+        }
+
+        /* responsive */
+        @media (max-width:900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .profile-pic {
+                width: 130px;
+                height: 130px
+            }
+
+            .container {
+                padding: 36px 18px
+            }
+        }
+
+        @media (max-width:520px) {
+            header {
+                top: 12px;
+                padding: 6px 10px
+            }
+
+            .brand .logo {
+                width: 38px;
+                height: 38px
+            }
+
+            .title-serif {
+                font-size: 22px
+            }
+
+            .grid img {
+                height: 140px
+            }
+
+            .grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        /* subtle cubic-bezier ease */
+        .ease-sub {
+            transition: all .45s cubic-bezier(.22, .95, .31, 1)
+        }
+
+        .btn-cta {
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #071227;
+            box-shadow: 0 6px 30px rgba(124, 92, 255, 0.12)
+        }
+
+        .ghost {
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 10px 14px;
+            border-radius: 12px
+        }
+
+        /* scroll to top */
+        #toTop {
+            position: fixed;
+            right: 18px;
+            bottom: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 60;
+            box-shadow: var(--neon);
+            cursor: pointer;
+            backdrop-filter: blur(6px)
+        }
+
+        #toTop:hover {
+            transform: translateY(-6px)
+        }
+
+        /* --- Responsive header & mobile nav fixes --- */
+
+        /* keep existing desktop header behavior by default */
+
+        /* mobile: disable fixed positioning and hide desktop nav */
+        @media (max-width: 720px) {
+            header.site-header {
+                position: static !important;
+                left: auto !important;
+                transform: none !important;
+                top: auto !important;
+                margin: 12px 14px;
+                width: auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 12px;
+                z-index: 60;
+                border-radius: 12px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.008));
+                backdrop-filter: blur(6px);
+                box-shadow: 0 8px 30px rgba(2, 3, 8, 0.45);
+            }
+
+            /* hide desktop nav pills on small screens */
+            .desktop-nav {
+                display: none
+            }
+
+            /* show menu toggle button */
+            .menu-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.02);
+                border: 0;
+                color: var(--muted);
+                font-size: 18px
+            }
+
+            .menu-toggle:focus {
+                outline: 2px solid rgba(124, 92, 255, 0.18);
+            }
+
+            /* mobile nav full-screen panel */
+            .mobile-nav {
+                position: fixed;
+                inset: 0;
+                z-index: 120;
+                background: linear-gradient(180deg, rgba(2, 3, 6, 0.92), rgba(2, 3, 6, 0.98));
+                display: flex;
+                flex-direction: column;
+                padding: 40px 20px;
+                transform: translateY(-8%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all .36s cubic-bezier(.22, .95, .31, 1);
+            }
+
+            .mobile-nav.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .mobile-nav .menu-close {
+                align-self: flex-end;
+                background: transparent;
+                border: 0;
+                color: var(--muted);
+                font-size: 22px;
+                padding: 8px;
+            }
+
+            .mobile-links {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                margin-top: 26px;
+                align-items: flex-start
+            }
+
+            .mobile-links a {
+                font-size: 20px;
+                color: #e6eef6;
+                text-decoration: none;
+                padding: 10px 6px;
+                border-radius: 10px;
+                display: block
+            }
+
+            .mobile-links a:hover {
+                color: white;
+                background: rgba(255, 255, 255, 0.02)
+            }
+        }
+
+        /* auto-hide header on scroll down for small screens */
+        @media (max-width: 720px) {
+            .site-header.hidden-on-scroll {
+                transform: translateY(-110%) !important;
+                transition: transform .32s cubic-bezier(.22, .95, .31, 1);
+            }
+        }
+
+        @media (min-width: 721px) {
+
+            /* Hide mobile fullscreen nav on desktop entirely */
+            .mobile-nav {
+                display: none !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+                transform: translateY(0) !important;
+            }
+
+            /* Hide the hamburger toggle on desktop */
+            .menu-toggle {
+                display: none !important;
+            }
+
+            /* Ensure desktop nav is visible (in case any rule hid it) */
+            .desktop-nav {
+                display: flex !important;
+                gap: 8px;
+                align-items: center;
+            }
+
+            /* Restore fixed desktop header position (if you had it before) */
+            .site-header {
+                position: fixed !important;
+                top: 18px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                margin: 0 !important;
+                width: auto !important;
+                z-index: 70 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Progress bar -->
+    <div id="progress" aria-hidden="true"></div>
+
+    <!-- Loader -->
+    <div id="loader" role="status" aria-live="polite">
+        <div style="text-align:center">
+            <div class="lds-ring" aria-hidden="true">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div style="margin-top:14px;color:var(--muted);letter-spacing:1px">Crafting the story...</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="brand">
+            <div class="logo">RP</div>
+            <div style="line-height:1">
+                <div style="font-weight:700">Rushi Parekh</div>
+                <div style="font-size:12px;color:var(--muted)">Nature loves symmetry!</div>
+            </div>
+        </div>
+        <nav class="desktop-nav" aria-label="Primary">
+            <a class="nav-pill" href="#basic">About</a>
+            <a class="nav-pill" href="#school">School</a>
+            <a class="nav-pill" href="#college">College</a>
+            <a class="nav-pill" href="#work">Career</a>
+            <a class="nav-pill" href="#chess">Chess</a>
+            <a class="nav-pill" href="#fitness">Fitness</a>
+            <a class="nav-pill" href="#rides">Cars & Bikes</a>
+            <a class="nav-pill" href="#movies">Movies</a>
+            <a class="nav-pill" href="#gallery">Gallery</a>
+        </nav>
+        <!-- Mobile controls -->
+        <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Mobile full-screen nav (hidden by default) -->
+    <nav id="mobileNav" class="mobile-nav" aria-hidden="true" role="navigation">
+        <button id="menuClose" class="menu-close" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+        <div class="mobile-links">
+            <a href="#basic">About</a>
+            <a href="#school">School</a>
+            <a href="#college">College</a>
+            <a href="#work">Career</a>
+            <a href="#chess">Chess</a>
+            <a href="#fitness">Fitness</a>
+            <a href="#rides">Cars & Bikes</a>
+            <a href="#movies">Movies</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero / Basic Info -->
+    <section id="basic" class="panel" data-section="basic">
+        <div class="bg-layer" style="background-image:url('imgs/06.jpg');transform:scale(1.08)">
+        </div>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="glass-card ease-sub" data-aos="fade-up" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="profile-pic" style="flex-basis:170px">
+                        <img src="imgs/unnamed.jpg" alt="Profile photo"
+                            style="width:100%;height:100%;object-fit:cover;display:block">
+                    </div>
+                    <div style="flex:1">
+                        <div class="title-serif">Rushi Parekh — <span
+                                style="font-weight:600;color:var(--accent)">Dreamer • Thinker • Builder</span></div>
+                        <div class="tagline">24 • Ahmedabad, India • Software Engineer</div>
+                        <div class="info-list" aria-hidden="false">
+                            <div class="info-item"><i class="fa-solid fa-cake" style="margin-right:6px;color:brown"></i>
+                                2nd June, 2001</div>
+                            <div class="info-item"><i class="fa-solid fa-briefcase"
+                                    style="margin-right:6px;color:var(--accent)"></i> Software Engineer</div>
+                            <div class="info-item"><i class="fa-solid fa-map-marker-alt"
+                                    style="margin-right:6px;color:var(--accent-2)"></i> Pune</div>
+                            <div class="info-item"><i class="fa-solid fa-graduation-cap"
+                                    style="margin-right:6px;color:#ffd080"></i> B.Tech — Computer Enginnering</div>
+                            <div class="info-item"><i class="fa-solid fa-chess"
+                                    style="margin-right:6px;color:#a0ffcf"></i> Chess Enthusiast</div>
+                            <div class="info-item"><i class="fa-solid fa-car"
+                                    style="margin-right:6px;color:#00158b"></i> Traveller</div>
+                        </div>
+
+                        <p class="story" style="margin-bottom:12px">
+                            I move through life like a quiet night drive — thoughtful, steady, and open to the
+                            possibilities of the road ahead.
+                            A listener who builds things that matter, I believe in simple gestures, deeper
+                            conversations, and shared curiosity.
+                            This page is a cinematic introduction — small scenes from a life shaped by code, stories,
+                            strategy, and the thrill of motion.
+                        </p>
+
+                        <div style="display:flex;gap:10px;align-items:center">
+                            <a href="#gallery" class="btn-cta ease-sub"><i
+                                    class="fa-solid fa-camera-retro"></i><span>View Moments</span></a>
+                            <a class="ghost ease-sub" href="#work"><i class="fa-solid fa-code"></i> Read My Story</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schooling -->
+    <section id="school" class="panel" data-section="school">
+        <div class="bg-layer" style="background-image:url('imgs/12.jpg');filter:grayscale(0.05)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.48), rgba(2,3,6,0.72));"></div>
+        <!-- floating numbers for visual flair -->
+        <div class="float-number" style="left:6%;top:18%" data-speed="0.8">7</div>
+        <div class="float-number" style="right:8%;top:26%" data-speed="1.3">1</div>
+        <div class="float-number" style="left:18%;bottom:16%" data-speed="1.1">9</div>
+
+        <div class="container">
+            <div class="glass-card" data-aos="fade-right" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row items-start gap-8">
+                    <div style="flex:1">
+                        <div class="title-serif">The First Equation</div>
+                        <p class="tagline" style="color:var(--muted)">Schooling — where curiosity began</p>
+                        <p class="story">
+                            There was a time when numbers felt like tiny secret doors — each problem a lock waiting for
+                            the right key.
+                            School wasn't just classrooms and chalk. It was the thrill of that first solved equation,
+                            the quiet joy of patterns, and the patient curiosity that turned questions into tools.
+                            I remember afternoons bent over puzzles, the logic of math shaping how I would later
+                            read code and find beauty in structure.
+                        </p>
+                    </div>
+                    <div style="width:320px;flex-shrink:0" data-aos="zoom-in" data-aos-duration="900">
+                        <div
+                            style="background:var(--glass);border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03)">
+                            <div style="font-weight:800;font-family:'Playfair Display';font-size:22px">Little numbers,
+                                big dreams</div>
+                            <div style="margin-top:10px;color:var(--muted)">Highlights</div>
+                            <ul style="margin-top:10px;color:#e6eef6;line-height:1.7">
+                                <li>Top of class in mathematics and logic exercises</li>
+                                <li>Science fair projects — building simple machines</li>
+                                <li>Curiosity-led experiments with tiny circuits</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- College Days -->
+    <section id="college" class="panel" data-section="college">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg');transform:scale(1.04)">
+        </div>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-left" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">Compilers & Coffee</div>
+                        <p class="tagline" style="color:var(--muted)">College days — discovery of a craft</p>
+                        <p class="story">
+                            College was a laboratory of late nights and small triumphs. Code became a language to shape
+                            ideas — a way to make abstract thoughts run and respond.
+                            Between project deadlines and campus festivals, I found a rhythm: a problem, a stack of
+                            notes, a cup of coffee, and the quiet satisfaction of a program that finally behaved.
+                            It was here I learned that building software is equal parts logic and poetry.
+                        </p>
+                        <div style="margin-top:12px">
+                            <div id="typeCode" style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "><code
+                                    class="text-sm"
+                                    style="display:inline-block;padding:8px 12px;border-radius:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.02)">const passion = "build elegant systems"</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width:360px;flex-shrink:0;position:relative">
+                        <div
+                            style="height:280px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 40px rgba(0,0,0,0.6)">
+                            <img src="imgs/18.jpg" alt="College coding"
+                                style="width:100%;height:100%;object-fit:cover;display:block">
+                        </div>
+
+                        <!-- small code card -->
+                        <div style="position:absolute;left:14px;bottom:-20px;transform:translateY(0);width:calc(100% - 28px)"
+                            data-aos="fade-up" data-aos-delay="200">
+                            <div class="glass-card" style="padding:12px;border-radius:12px">
+                                <div style="font-weight:700;font-size:13px">Campus Projects</div>
+                                <div style="color:var(--muted);font-size:13px;margin-top:6px">
+                                    Open-source contributions, hackathons, and a love for clean, modular code.
+                                </div>
+                                <div style="margin-top:10px;display:flex;gap:8px">
+                                    <span class="info-item"><i class="fa-solid fa-trophy"
+                                            style="margin-right:6px;color:#ffd080"></i> Hackathon finalist</span>
+                                    <span class="info-item"><i class="fa-solid fa-code"
+                                            style="margin-right:6px;color:var(--accent)"></i> OSS contributor</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Engineer / Career -->
+    <section id="work" class="panel" data-section="work">
+        <!-- <canvas id="binaryCanvas" style="position:absolute;inset:0;z-index:3;pointer-events:none"></canvas> -->
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg');filter:brightness(0.8)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.7));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="zoom-in" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <div style="flex:1">
+                        <div class="title-serif">First Deploy</div>
+                        <p class="tagline" style="color:var(--muted)">From curious student to software engineer</p>
+                        <p class="story">
+                            The first time code met production the room felt both small and infinite. An anxious push, a
+                            heartbeat of logs, and then — a feature humming in the wild.
+                            Over the years I have learned the tender balance between pragmatism and craft: shipping
+                            with care, reading telemetry like a map, and always making room to learn.
+                            Building resilient systems taught patience; mentoring juniors taught empathy. The career is
+                            less a ladder and more a sequence of doors opened thoughtfully.
+                        </p>
+
+                        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+                            <div class="info-item"><i class="fa-solid fa-server"
+                                    style="margin-right:8px;color:#a0ffcf"></i> Distributed Systems</div>
+                            <div class="info-item"><i class="fa-solid fa-shield"
+                                    style="margin-right:8px;color:#ffd080"></i> Reliability</div>
+                            <div class="info-item"><i class="fa-solid fa-tools"
+                                    style="margin-right:8px;color:var(--accent)"></i> APIs & Microservices</div>
+                        </div>
+                    </div>
+
+                    <div style="width:320px;flex-shrink:0">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="imgs/13.jpg" alt="Workstation"
+                                style="width:100%;height:280px;object-fit:cover;display:block">
+                        </div>
+                        <div style="margin-top:12px" data-aos="fade-up">
+                            <div class="ghost" style="display:flex;align-items:center;justify-content:space-between">
+                                <div>
+                                    <div style="font-weight:800">First Production Feature</div>
+                                    <div style="color:var(--muted);font-size:13px">A small but meaningful improvement
+                                        that scaled.</div>
+                                </div>
+                                <div style="text-align:right">
+                                    <div style="font-weight:800;font-size:18px;color:var(--accent)">+99%</div>
+                                    <div style="color:var(--muted);font-size:12px">Uptime</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chess -->
+    <section id="chess" class="panel" data-section="chess">
+        <div class="bg-layer"
+            style="background-image:url('https://images.unsplash.com/photo-1663411605306-ae74cb6a5618');filter:brightness(0.42)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.6), rgba(2,3,6,0.86));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-right">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">A Thousand Quiet Games</div>
+                        <p class="tagline" style="color:var(--muted)">Learning patience, one move at a time</p>
+                        <p class="story">
+                            Chess taught strategy before the word felt grand — it taught patience. Each loss was a
+                            lesson stitched into the next plan.
+                            From casual games at dusk to careful study of openings, I climbed to a thoughtful 1000
+                            ELO, not for trophies, but for the ritual of concentration and the slow joy of improvement.
+                            The board is a small theater where every piece tells a story.
+                        </p>
+
+                        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+                            <div class="info-item"><i class="fa-solid fa-chess-knight"
+                                    style="margin-right:8px;color:#a0ffcf"></i> Strategy</div>
+                            <div class="info-item"><i class="fa-solid fa-hourglass"
+                                    style="margin-right:8px;color:#ffd080"></i> Patience</div>
+                            <div class="info-item"><i class="fa-solid fa-brain"
+                                    style="margin-right:8px;color:var(--accent)"></i> Pattern Recognition</div>
+                        </div>
+                    </div>
+                    <div style="width:280px;flex-shrink:0" data-aos="zoom-in">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="https://images.pexels.com/photos/277092/pexels-photo-277092.jpeg" alt="chess"
+                                style="width:100%;height:220px;object-fit:cover;display:block;filter:contrast(0.9)">
+                        </div>
+                        <div style="margin-top:10px;display:flex;gap:8px">
+                            <button class="ghost ease-sub"><i class="fa-solid fa-book-open"
+                                    style="margin-right:8px"></i>Favorite Opening</button>
+                            <button class="btn-cta ease-sub"><i class="fa-solid fa-wand-magic-sparkles"
+                                    style="margin-right:8px"></i>Practice Ritual</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fitness -->
+    <section id="fitness" class="panel" data-section="fitness">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/416778/pexels-photo-416778.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900');transform:scale(1.03)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.8));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-up" data-aos-duration="900">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">Calm Strength</div>
+                        <p class="tagline" style="color:var(--muted)">Fitness — crafted through movement, not mass</p>
+                        <p class="story"> Fitness for me is a quiet, steady practice — the kind that prefers control
+                            over excess
+                            and function over flash. Years of calisthenics taught me to value strength that moves you:
+                            clean pull-ups,
+                            deliberate progressions, and mobility that lets you live freely. It's not about looking
+                            bigger — it's about
+                            feeling capable, balanced, and resilient in everyday moments. My sessions are short,
+                            consistent, and
+                            focused on skillful progression: mastering movement before chasing size. </p>
+                        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+                            <div class="info-item"><i class="fa-solid fa-dumbbell"
+                                    style="margin-right:8px;color:#ffd080"></i>
+                                Calisthenics & Bodyweight</div>
+                            <div class="info-item"><i class="fa-solid fa-person-running"
+                                    style="margin-right:8px;color:var(--accent)"></i> Mobility & Conditioning</div>
+                            <div class="info-item"><i class="fa-solid fa-seedling"
+                                    style="margin-right:8px;color:#a0ffcf"></i> Strength
+                                over Bulk</div>
+                        </div>
+
+                        <div style="margin-top:14px">
+                            <div class="ghost" style="display:inline-flex;align-items:center;gap:10px">
+                                <i class="fa-solid fa-stopwatch"></i>
+                                <div style="text-align:left">
+                                    <div style="font-weight:800">Training Ritual</div>
+                                    <div style="color:var(--muted);font-size:13px">Short daily habits: skill work,
+                                        mobility flows, and
+                                        progressive resistance.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="width:320px;flex-shrink:0" data-aos="zoom-in">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="imgs/05.jpg" alt="Calisthenics training"
+                                style="width:100%;height:220px;object-fit:cover;display:block">
+                        </div>
+                        <div style="margin-top:10px;color:var(--muted)">
+                            <div style="font-weight:800">Why Calisthenics?</div>
+                            <div>Durable movement, elegant strength, and the freedom to train anywhere.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Cars & Bikes -->
+    <section id="rides" class="panel" data-section="rides">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg');transform:scale(1.06);filter:contrast(1.08)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.48), rgba(0,0,0,0.72));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-left">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div style="flex:1">
+                        <div class="title-serif">Throttle & Sunset</div>
+                        <p class="tagline" style="color:var(--muted)">A love for speed, design & open roads</p>
+                        <p class="story">
+                            The engine's rumble is where focus sharpens and the day's chatter falls away. Cars and bikes
+                            are more than machines — they are conversations in metal and motion.
+                            Whether it’s the subtle geometry of a sports car or the clean silhouette of a motorcycle,
+                            I appreciate design that moves the heart as much as the body.
+                            Weekend drives, careful modifications, and the quiet pride of a well-loved ride are part of
+                            this story.
+                        </p>
+                        <div style="margin-top:12px;display:flex;gap:8px">
+                            <div class="info-item"><i class="fa-solid fa-car-side"
+                                    style="margin-right:8px;color:#ffd080"></i>Design Aesthetics</div>
+                            <div class="info-item"><i class="fa-solid fa-road"
+                                    style="margin-right:8px;color:var(--accent)"></i>Road Trips</div>
+                            <div class="info-item"><i class="fa-solid fa-tools"
+                                    style="margin-right:8px;color:#a0ffcf"></i>Maintenance</div>
+                        </div>
+                    </div>
+                    <div style="width:320px;flex-shrink:0" data-aos="zoom-in">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="imgs/09.jpg" alt="ride"
+                                style="width:100%;height:280px;object-fit:cover;display:block">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movies & Web Series -->
+    <section id="movies" class="panel" data-section="movies">
+        <div class="bg-layer"
+            style="background-image:url('https://images.unsplash.com/photo-1717295248494-937c3a5655b1');filter:brightness(0.6)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.5), rgba(2,3,6,0.85));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-up">
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <div style="flex:1">
+                        <div class="title-serif">Stories That Linger</div>
+                        <p class="tagline" style="color:var(--muted)">Action, thriller, mystery & fantasy</p>
+                        <p class="story">
+                            Films and series are my private classrooms of character and possibility. I love
+                            action that moves the pulse, mysteries that twist expectations, and fantasy that expands
+                            wonder.
+                            A lifelong fan of epic narratives, "Game of Thrones" holds a special place — not for
+                            spectacle alone, but for how characters become mirrors for choice, courage, and consequence.
+                        </p>
+                        <div style="margin-top:12px">
+                            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                                <div class="info-item"><i class="fa-solid fa-film"
+                                        style="margin-right:8px;color:#ffd080"></i>Psycho Thrillers</div>
+                                <div class="info-item"><i class="fa-solid fa-mask"
+                                        style="margin-right:8px;color:var(--accent)"></i>Fantasy Fiction</div>
+                                <div class="info-item"><i class="fa-solid fa-tv"
+                                        style="margin-right:8px;color:#a0ffcf"></i>Deep Characters</div>
+                                <div class="info-item"><i class="fa-solid fa-brain"
+                                        style="margin-right:8px;color:#1df509"></i>Mysterious</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="width:320px;flex-shrink:0" data-aos="flip-left">
+                        <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)">
+                            <img src="imgs/14.jpg" alt="movies"
+                                style="width:100%;height:220px;object-fit:cover;display:block">
+                        </div>
+                        <div style="margin-top:12px;color:var(--muted)">
+                            <div style="font-weight:800">All-time Favourite</div>
+                            <div>Game of Thrones — for complex characters and sweeping stories</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section id="gallery" class="panel" data-section="gallery">
+        <div class="bg-layer"
+            style="background-image:url('https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg');filter:brightness(0.55)">
+        </div>
+        <div class="overlay" style="background:linear-gradient(180deg, rgba(2,3,6,0.5), rgba(2,3,6,0.8));"></div>
+        <div class="container">
+            <div class="glass-card" data-aos="fade-up">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div class="title-serif">Moments</div>
+                        <div class="tagline" style="color:var(--muted)">A small gallery — fragments from the road</div>
+                    </div>
+                    <div>
+                        <button class="ghost" onclick="shuffleGallery()"><i class="fa-solid fa-shuffle"></i>
+                            Shuffle</button>
+                        <a href="#basic" class="btn-cta"><i class="fa-solid fa-arrow-up"></i> Connect</a>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px">
+                    <div class="grid" id="photoGrid">
+                        <div class="item" data-aos="zoom-in" data-aos-delay="50" style="max-width: fit-content;">
+                            <img src="imgs/03.jpg" alt="pic1">
+                            <div class="caption">What Else?</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="150">
+                            <img src="imgs/06.jpg" alt="pic3">
+                            <div class="caption">Thinking Mode On</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="100" style="max-width: fit-content;">
+                            <img src="imgs/15.jpg" alt="pic2">
+                            <div class="caption">Sunset Drive</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="250">
+                            <img src="imgs/11.jpg" alt="pic5">
+                            <div class="caption">With Dad</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="200">
+                            <img src="imgs/19.jpg" alt="pic4" style="max-width: fit-content;">
+                            <div class="caption">With Dishlu</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="300">
+                            <img src="imgs/04.jpg" alt="pic6">
+                            <div class="caption">With Maa</div>
+                        </div>
+
+                        <div class="item" data-aos="zoom-in" data-aos-delay="350">
+                            <img src="imgs/08.jpg" alt="pic4" style="max-width: fit-content;">
+                            <div class="caption">Music Time</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="400">
+                            <img src="imgs/16.jpg" alt="pic5">
+                            <div class="caption">With Anshudu</div>
+                        </div>
+                        <div class="item" data-aos="zoom-in" data-aos-delay="450">
+                            <img src="imgs/07.jpg" alt="pic6" style="max-width: fit-content;">
+                            <div class="caption">Long Bike Rides</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container" style="max-width:1100px">
+            <div style="display:flex;flex-direction:column;gap:18px">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
+                    <div>
+                        <div style="font-weight:800;font-size:20px">Let's keep it simple</div>
+                        <div style="color:var(--muted)">If you'd like to reach out — here's a gentle hello.</div>
+                    </div>
+
+                    <div class="social" style="display:flex;align-items:center">
+                        <a target="_blank" href="https://www.linkedin.com/in/rushiraj-parekh/" title="LinkedIn"
+                            aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a target="_blank" href="https://www.instagram.com/_rushiparekh/" title="Instagram"
+                            aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a target="_blank" href="#" title="GitHub" aria-label="GitHub"><i
+                                class="fa-brands fa-github"></i></a>
+                        <a target="_blank" href="rushiparekh026@gmail.com" title="Mail" aria-label="Mail"><i
+                                class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
+                    <div style="color:var(--muted)">© <span id="year"></span> Rushi Parekh. Crafted with care.</div>
+                    <div style="display:flex;gap:12px">
+                        <a class="ghost" href="#basic">About</a>
+                        <a class="ghost" href="#gallery">Gallery</a>
+                        <a class="ghost" href="#movies">Favorites</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to top -->
+    <div id="toTop" title="Back to top" aria-hidden="false">
+        <i class="fa-solid fa-arrow-up" style="color:var(--muted)"></i>
+    </div>
+
+    <!-- JS (embedded) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize content, AOS and simple interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // AOS init
+            AOS.init({ once: true, duration: 800, easing: 'cubic-bezier(.22,.95,.31,1)' });
+
+            // Loader hide after small delay to let animations breathe
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if (loader) loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 650);
+            }, 900);
+
+            // Scroll progress bar
+            const progress = document.getElementById('progress');
+            window.addEventListener('scroll', () => {
+                const h = document.documentElement;
+                const percent = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+                progress.style.width = percent + '%';
+            });
+
+            // Smooth parallax using GSAP ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+            document.querySelectorAll('.bg-layer').forEach((bg, i) => {
+                let speed = 0.15 + (i % 3) * 0.06;
+                gsap.to(bg, {
+                    yPercent: -10 - (i % 2 === 0 ? 6 : 2),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: bg.parentElement,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 0.9
+                    }
+                });
+            });
+
+            // Entrance subtle animations on header
+            gsap.from('header', { y: -20, opacity: 0, duration: 0.9, ease: 'power3.out' });
+
+            // Typing effect for code snippet (college)
+            const codeText = 'const passion = "build elegant systems";';
+            const typeEl = document.querySelector('#typeCode code');
+            let idx = 0;
+            function typeLoop() {
+                if (idx <= codeText.length) {
+                    typeEl.textContent = codeText.slice(0, idx) + (idx % 2 === 0 ? '|' : '');
+                    idx++;
+                    setTimeout(typeLoop, 60);
+                } else {
+                    typeEl.textContent = codeText;
+                }
+            }
+            typeLoop();
+
+            // Gallery shuffle
+            window.shuffleGallery = function () {
+                const grid = document.getElementById('photoGrid');
+                for (let i = grid.children.length; i >= 0; i--) {
+                    grid.appendChild(grid.children[Math.random() * i | 0]);
+                }
+                AOS.refreshHard();
+            };
+
+            // Scroll to top
+            const toTop = document.getElementById('toTop');
+            toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            // show/hide toTop
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) toTop.style.transform = 'translateY(0)';
+                else toTop.style.transform = 'translateY(50px)';
+            });
+
+            // Hover neon glow on cta
+            document.querySelectorAll('.btn-cta').forEach(btn => {
+                btn.addEventListener('mouseenter', () => gsap.to(btn, { scale: 1.03, boxShadow: '0 10px 40px rgba(124,92,255,0.18)', duration: 0.35 }));
+                btn.addEventListener('mouseleave', () => gsap.to(btn, { scale: 1, boxShadow: '0 6px 30px rgba(124,92,255,0.12)', duration: 0.35 }));
+            });
+
+            // Floating numbers parallax subtle movement
+            document.querySelectorAll('.float-number').forEach(el => {
+                const s = parseFloat(el.getAttribute('data-speed') || '1');
+                gsap.to(el, {
+                    y: (s * -40) + 'px', ease: 'none', scrollTrigger: {
+                        trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 0.7
+                    }
+                });
+            });
+
+            // Photo hover caption animations handled in CSS; small tilt effect
+            document.querySelectorAll('.grid .item img').forEach(img => {
+                img.addEventListener('mousemove', (e) => {
+                    const r = img.getBoundingClientRect();
+                    const px = (e.clientX - r.left) / r.width;
+                    const py = (e.clientY - r.top) / r.height;
+                    gsap.to(img, { rotationX: (py - 0.5) * 3, rotationY: (px - 0.5) * 3, transformPerspective: 800, duration: 0.6, ease: 'power2.out' });
+                });
+                img.addEventListener('mouseleave', () => gsap.to(img, { rotationX: 0, rotationY: 0, duration: 0.6 }));
+            });
+
+            // Binary rain canvas for work section
+            // initBinaryCanvas();
+        });
+
+        /* Binary rain implementation (subtle)
+        function initBinaryCanvas() {
+            const canvas = document.getElementById('binaryCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let W = canvas.width = window.innerWidth;
+            let H = canvas.height = window.innerHeight;
+            let columns = Math.floor(W / 20);
+            let drops = [];
+            for (let i = 0; i < columns; i++) drops[i] = Math.floor(Math.random() * H / 20);
+
+            function draw() {
+                ctx.fillStyle = "rgba(0,0,0,0)";
+                ctx.fillRect(0, 0, W, H);
+                ctx.fillStyle = "rgba(0, 229, 255, 0.04)";
+                ctx.font = "14px monospace";
+                for (let i = 0; i < drops.length; i++) {
+                    const text = Math.random() > 0.5 ? '0' : '1';
+                    ctx.fillText(text, i * 20, drops[i] * 20);
+                    if (drops[i] * 20 > H && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }
+            let raf;
+            function loop() {
+                draw();
+                raf = requestAnimationFrame(loop);
+            }
+            loop();
+            window.addEventListener('resize', () => {
+                cancelAnimationFrame(raf);
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+                columns = Math.floor(W / 20);
+                drops = [];
+                for (let i = 0; i < columns; i++) drops[i] = Math.floor(Math.random() * H / 20);
+                loop();
+            });
+        }
+        */
+
+        // small accessibility: keyboard toTop
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Home') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        // small smooth scroll for anchor nav (works for browsers without native smooth)
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                const href = a.getAttribute('href');
+                if (href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+    </script>
+
+    <!-- AOS init end -->
+    <script>
+        // Ensure AOS refresh after content loaded
+        window.addEventListener('load', function () { AOS.refresh(); });
+    </script>
+
+    <script>
+        (function () {
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            const menuClose = document.getElementById('menuClose');
+            const header = document.querySelector('.site-header');
+
+            // Toggle mobile nav
+            function openMenu() {
+                mobileNav.classList.add('open');
+                mobileNav.setAttribute('aria-hidden', 'false');
+                menuToggle.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden'; // prevent page scroll when nav open
+            }
+            function closeMenu() {
+                mobileNav.classList.remove('open');
+                mobileNav.setAttribute('aria-hidden', 'true');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            if (menuToggle) { menuToggle.addEventListener('click', openMenu); }
+            if (menuClose) { menuClose.addEventListener('click', closeMenu); }
+            // Close mobile nav on internal link click
+            document.querySelectorAll('#mobileNav a[href^="#"]').forEach(a => {
+                a.addEventListener('click', () => {
+                    closeMenu();
+                    // small delay to allow nav close animation before scrolling
+                    setTimeout(() => { const target = document.querySelector(a.getAttribute('href')); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 250);
+                });
+            });
+
+            // Auto-hide header on mobile when scrolling down, show on scroll up
+            let lastScroll = 0;
+            let ticking = false;
+            function onScroll() {
+                const w = window.innerWidth || document.documentElement.clientWidth;
+                if (w > 720) return; // only active on small screens
+                const current = window.scrollY;
+                if (current <= 40) {
+                    header.classList.remove('hidden-on-scroll');
+                    lastScroll = current;
+                    return;
+                }
+                if (current > lastScroll && current > 80) {
+                    // scrolling down
+                    header.classList.add('hidden-on-scroll');
+                } else {
+                    // scrolling up
+                    header.classList.remove('hidden-on-scroll');
+                }
+                lastScroll = current;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) { window.requestAnimationFrame(() => { onScroll(); ticking = false; }); ticking = true; }
+            }, { passive: true });
+
+            // ensure header resets if window resized to large
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 720) {
+                    mobileNav.classList.remove('open');
+                    header.classList.remove('hidden-on-scroll');
+                    document.body.style.overflow = '';
+                }
+            });
+        })();
+    </script>
+
+    <script>
+        /* Ensure mobile nav is closed when on desktop (load + resize) */
+        (function () {
+            function ensureDesktopState() {
+                const mobileNav = document.getElementById('mobileNav');
+                const menuToggle = document.getElementById('menuToggle');
+                if (window.innerWidth > 720) {
+                    if (mobileNav) {
+                        mobileNav.classList.remove('open');
+                        mobileNav.setAttribute('aria-hidden', 'true');
+                    }
+                    if (menuToggle) {
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                    // restore scroll if it was locked
+                    document.body.style.overflow = '';
+                }
+            }
+            window.addEventListener('load', ensureDesktopState);
+            window.addEventListener('resize', ensureDesktopState);
+        })();
+    </script>
+</body>
+
+</html>
